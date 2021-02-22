@@ -22,7 +22,7 @@ to try to implement the vm in those languages as well, using deno for the TypeSc
 - [ ] Episode 15
 
 ## Rust
-- [ ] Episode 1
+- [x] Episode 1
 - [ ] Episode 2
 - [ ] Episode 3
 - [ ] Episode 4
