@@ -1,13 +1,51 @@
-use vm::say_hi;
+mod cpu;
+mod instructions;
+mod memory;
 
-mod rabalder;
-
-use crate::rabalder::hahaha;
+use crate::memory::Memory;
+use crate::cpu::CPU;
 
 fn main() {
-    println!("Hello, world!");
-    let b: [u8;4] = [1,2,3,4];
-    println!("{:#08b}{:#08b}",b[0],b[1]);
-    say_hi();
-    hahaha();
+    let mut m = Memory::new(256);
+    let mut i = 0;
+
+    m.set_uint8(i, instructions::MOV_LIT_R1);
+    i += 1;
+    m.set_uint8(i, 0x12);
+    i += 1;
+    m.set_uint8(i, 0x34);
+    i += 1;
+
+    m.set_uint8(i, instructions::MOV_LIT_R2);
+    i += 1;
+    m.set_uint8(i, 0xAB);
+    i += 1;
+    m.set_uint8(i, 0xCD);
+    i += 1;
+
+    m.set_uint8(i, instructions::ADD_REG_REG);
+    i += 1;
+    m.set_uint8(i, 0x02);
+    i += 1;
+    m.set_uint8(i, 0x03);
+
+    //println!("{:?}", &m);
+    
+    let mut cpu = CPU::new(m);
+
+    println!("{:?}", &cpu);
+    
+
+
+    cpu.debug();
+
+    cpu.step();
+    cpu.debug();
+
+    cpu.step();
+    cpu.debug();
+
+    cpu.step();
+    cpu.debug();
+
 }
