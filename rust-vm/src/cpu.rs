@@ -18,7 +18,7 @@ impl CPU {
             "r1".to_string(), "r2".to_string(), "r3".to_string(), "r4".to_string(),
             "r5".to_string(), "r6".to_string(), "r7".to_string(), "r8".to_string(),
         ];
-        let registers = Memory::new(register_names.len());
+        let registers = Memory::new(register_names.len() * 2);
         let register_map =  register_names.iter().enumerate().fold(HashMap::new(), |mut map: HashMap<String, usize>, (i, name)| {
             map.insert(
                 name.to_string(), i * 2,
@@ -37,7 +37,7 @@ impl CPU {
 
     pub fn debug(&self) {
         for name in &self.register_names {
-            println!("{}: {:#x}", name, self.get_register(name.to_string()));
+            println!("{}: {:#06x}", name, self.get_register(name.to_string()));
         }
         println!("");
     }
