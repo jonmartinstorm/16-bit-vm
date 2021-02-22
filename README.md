@@ -5,7 +5,7 @@ It is an excellent series which will be fun to implement. To practice both rust 
 to try to implement the vm in those languages as well, using deno for the TypeScript one.
 
 ## JavaScript
-- [ ] Episode 1
+- [x] Episode 1
 - [ ] Episode 2
 - [ ] Episode 3
 - [ ] Episode 4
