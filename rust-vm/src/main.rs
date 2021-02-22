@@ -28,14 +28,8 @@ fn main() {
     m.set_uint8(i, 0x02);
     i += 1;
     m.set_uint8(i, 0x03);
-
-    //println!("{:?}", &m);
-    
+  
     let mut cpu = CPU::new(m);
-
-    println!("{:?}", &cpu);
-    
-
 
     cpu.debug();
 
