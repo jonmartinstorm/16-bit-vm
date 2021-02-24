@@ -44,14 +44,14 @@ impl CPU {
 
     pub fn view_memory_at(&self, address: u16) {
         let next_eight_bytes: Vec<String> = vec!["".to_string(); 8].into_iter().enumerate()
-            .map(|(i, v)| {
+            .map(|(i, _v)| {
                 format!("{:#04x}", self.memory.get_uint8(address as usize + i))
         }).collect();
 
         println!("{:#06x}: {}", address, next_eight_bytes.join(" "));
     }
 
-    fn get_register(&self, name: String) -> u16{
+    pub fn get_register(&self, name: String) -> u16{
         // TODO: check for register in registermap
         self.registers.get_uint16(self.register_map[&name])
     }
@@ -110,6 +110,15 @@ impl CPU {
                 let register_value1 = self.registers.get_uint16((r1 * 2).into());
                 let register_value2 = self.registers.get_uint16((r2 * 2).into());
                 self.set_register("acc".to_string(), register_value1 + register_value2);
+            },
+
+            instructions::JMP_NOT_EQ => {
+                let literal = self.fetch16();
+                let address = self.fetch16();
+
+                if literal != self.get_register("acc".to_string()) {
+                    self.set_register("ip".to_string(), address);
+                }
             },
 
             _ => {},
