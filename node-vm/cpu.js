@@ -95,12 +95,6 @@ class CPU {
                 this.registers.setUint16(registerTo, value);
                 return;
             }
-            
-            case instructions.MOV_LIT_R2: {
-                const literal = this.fetch16();
-                this.setRegister("r2", literal);
-                return;
-            }
 
             case instructions.ADD_REG_REG: {
                 const r1 = this.fetch();
