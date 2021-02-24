@@ -42,6 +42,15 @@ impl CPU {
         println!("");
     }
 
+    pub fn view_memory_at(&self, address: u16) {
+        let next_eight_bytes: Vec<String> = vec!["".to_string(); 8].into_iter().enumerate()
+            .map(|(i, v)| {
+                format!("{:#04x}", self.memory.get_uint8(address as usize + i))
+        }).collect();
+
+        println!("{:#06x}: {}", address, next_eight_bytes.join(" "));
+    }
+
     fn get_register(&self, name: String) -> u16{
         // TODO: check for register in registermap
         self.registers.get_uint16(self.register_map[&name])
@@ -68,14 +77,31 @@ impl CPU {
 
     fn execute(&mut self, instruction: u8) {
         match instruction {
-            instructions::MOV_LIT_R1 => {
+            instructions::MOV_LIT_REG => {
                 let literal = self.fetch16();
-                self.set_register("r1".to_string(), literal);
+                let register = (self.fetch() as usize % self.register_names.len()) * 2;
+                self.registers.set_uint16(register, literal);
             },
 
-            instructions::MOV_LIT_R2 => {
-                let literal = self.fetch16();
-                self.set_register("r2".to_string(), literal);
+            instructions::MOV_REG_REG => {
+                let register_from = (self.fetch() as usize % self.register_names.len()) * 2;
+                let register_to = (self.fetch() as usize % self.register_names.len()) * 2;
+                let value = self.registers.get_uint16(register_from.into());
+                self.registers.set_uint16(register_to, value);
+            },
+
+            instructions::MOV_REG_MEM => {
+                let register_from = (self.fetch() as usize % self.register_names.len()) * 2;
+                let address = self.fetch16();
+                let value = self.registers.get_uint16((register_from).into());
+                self.memory.set_uint16(address.into(), value);
+            },
+
+            instructions::MOV_MEM_REG => {
+                let address = self.fetch16();
+                let register_to = (self.fetch() as usize % self.register_names.len()) * 2;
+                let value = self.memory.get_uint16(address.into());
+                self.registers.set_uint16(register_to, value);
             },
 
             instructions::ADD_REG_REG => {
